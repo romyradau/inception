@@ -1,0 +1,27 @@
+server {
+
+     # TELLS TO LISTEN TO PORT 443 (ITS AN HTTP PORT)
+     listen 443 ssl;
+     # same but for IPV6
+	listen [::]:443 ssl;
+
+     # tells the name(s) of our website
+     server_name rschleic.42.fr;
+
+	#Create the SSL certificates in your own folder
+	ssl_certificate		/etc/nginx/ssl/rschleic.crt;
+	ssl_certificate_key	/etc/nginx/ssl/rschleic.key;
+
+	#Encription protocol TSL v1.3
+	ssl_protocols		TLSv1.3;
+
+	#This is the index page and the directory where we get it from
+	root /var/www/html;
+	index index.php index.nginx-debian.html;
+
+
+	# Checks the existence of files
+	# Otherwise a 404 will be sent
+	location / {
+		try_files $uri $uri/ =404;
+	}
