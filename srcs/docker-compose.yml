@@ -1,0 +1,16 @@
+#first the version docker --version "number" ->translaet to compose file format
+version: "3.5"
+
+#networks:
+  #creates a network
+ # inception_network:
+    #driver: bridge
+services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    #networks:
+    #  - inception_network
+    ports:
+      - 443:443
+    restart: always
