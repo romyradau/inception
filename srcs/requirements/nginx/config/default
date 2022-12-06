@@ -1,12 +1,12 @@
 server {
 
-     # TELLS TO LISTEN TO PORT 443 (ITS AN HTTP PORT)
-     listen 443 ssl;
-     # same but for IPV6
+    # TELLS TO LISTEN TO PORT 443 (ITS AN HTTP PORT)
+    listen 443 ssl;
+    # same but for IPV6
 	listen [::]:443 ssl;
 
-     # tells the name(s) of our website
-     server_name rschleic.42.fr;
+    # tells the name(s) of our website
+    server_name rschleic.42.fr;
 
 	#Create the SSL certificates in your own folder
 	ssl_certificate		/etc/nginx/ssl/rschleic.crt;
