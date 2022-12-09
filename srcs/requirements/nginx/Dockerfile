@@ -8,8 +8,9 @@ RUN apt update && apt install -y nginx openssl
 RUN mkdir etc/nginx/ssl
 
 
-COPY ./config/default /etc/nginx/sites-available
+COPY ./config/default /etc/nginx/sites-available/
 #verstehe hier nicht genau was passiert
+#man will das config des containers mit dem aus der Vm ersetzen. links ist VM, rechts ist container files
 
 
 RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/rschleic.crt -keyout /etc/nginx/ssl/rschleic.key -subj "/CN=rschleic.42.fr/" 
