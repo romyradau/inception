@@ -9,7 +9,7 @@ RUN mkdir etc/nginx/ssl
 
 
 COPY ./config/default /etc/nginx/sites-available/
-#verstehe hier nicht genau was passiert
+#muss es nicht in /etc/nginx/conf.d/default.conf?
 #man will das config des containers mit dem aus der Vm ersetzen. links ist VM, rechts ist container files
 
 
