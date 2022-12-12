@@ -5,7 +5,7 @@ RUN apt update && apt install -y nginx openssl
 #y == yes fragt nach ob ich das moechte
 
 #alle apkete gelichzeitig installieren
-RUN mkdir etc/nginx/ssl
+RUN mkdir /etc/nginx/ssl
 
 
 COPY ./config/default /etc/nginx/sites-available/
