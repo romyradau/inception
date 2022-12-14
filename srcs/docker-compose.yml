@@ -38,11 +38,13 @@ services:
     #this means we're picking the folder we actually want to live outside safely in wp_data
     ports:
       - 9000:9000
-    environment:
+    env_file:
+      - .env
+    #environment:
       #uses the ones just created in db environment
-      WORDPRESS_DB_USER: wp_user
-      WORDPRESS_DB_PASSWORD: wp_db_pass
-      WORDPRESS_DB_HOST: db:3306
+      #WORDPRESS_DB_USER: wp_user
+      #WORDPRESS_DB_PASSWORD: wp_db_pass
+      #WORDPRESS_DB_HOST: db:3306
       #needs IP address and port of the mySQL server
       #but with docker compose instead of IP one can use the service name - db
   db:
@@ -52,15 +54,22 @@ services:
     restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql
+      #important to not wipe all the data and insted store it locally
     environment:
       MYSQL_ROOT_PASSWORD: root_pass
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp_user
       MYSQL_PASSWORD: wp_db_password
-  php:
-    image: php:7.4-fpm-alpine
-    volumes:
-      - wp_data:/var/www/html:delegated
+    ports:
+      - 3306:3306
+    env_file:
+      - .env
+
+      
+  # php:
+  #   image: php:7.4-fpm-alpine
+  #   volumes:
+  #     - wp_data:/var/www/html:delegated
 
 
 
