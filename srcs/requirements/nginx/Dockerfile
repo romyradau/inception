@@ -8,7 +8,8 @@ RUN apt update && apt install -y nginx openssl
 RUN mkdir /etc/nginx/ssl
 
 
-COPY ./config/default /etc/nginx/sites-available/
+COPY ./config/default /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
 #muss es nicht in /etc/nginx/conf.d/default.conf?
 #man will das config des containers mit dem aus der Vm ersetzen. links ist VM, rechts ist container files
 

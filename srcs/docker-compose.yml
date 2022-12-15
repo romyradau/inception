@@ -1,31 +1,31 @@
 #first the version docker --version "number" ->translaet to compose file format
 version: "3.5"
 
-# networks:
+networks:
   #creates a network
-#  inception_network:
-#     driver: bridge
+ inception_network:
+    driver: bridge
 services:
   nginx:
     container_name: nginx
     # image: nginx
     build: ./requirements/nginx
-    # networks:
-    #  - inception_network
+    networks:
+     - inception_network
     ports:
       - 443:443
     #these are the ports we can now use in the local machines browser
 
-    #depends_on:
-      #- wordpress
+    depends_on:
+      - wordpress
     restart: unless-stopped
 
   wordpress:
     image: wordpress:latest
     #hier steht eigentlich build -> pfad zu custom Dockerfile
     #vielleicht kann man es dann bei Dockerhub finden, wie es aussieht...
-    # networks:
-    #  - inception_network
+    networks:
+     - inception_network
     depends_on:
       - db
       #to avoid wordpress to connect to the db efore its ready
@@ -36,8 +36,6 @@ services:
       #delegated to speed up on mac os filesystems
       #da wird psaeter bestimmt ein anderer Ordner sein
     #this means we're picking the folder we actually want to live outside safely in wp_data
-    ports:
-      - 9000:9000
     env_file:
       - .env
     #environment:
@@ -48,9 +46,13 @@ services:
       #needs IP address and port of the mySQL server
       #but with docker compose instead of IP one can use the service name - db
   db:
-    image: mariadb:latest
-    # networks:
-    #  - inception_network
+    container_name: mariadb
+    # image: nginx
+    env_file:
+      - .env
+    build: ./requirements/mariadb
+    networks:
+     - inception_network
     restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql
@@ -60,10 +62,9 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp_user
       MYSQL_PASSWORD: wp_db_password
-    ports:
-      - 3306:3306
-    env_file:
-      - .env
+    # ports:
+    #   - 3306:3306
+    #no ports!!
 
       
   # php:

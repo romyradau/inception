@@ -1,11 +1,4 @@
 #basic nginx configuration for wordpress
-upstream php {
-
-	server unix:/tmp/php-cgi.socket;
-	server php:9000;
-}
-
-
 
 server {
 
