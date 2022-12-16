@@ -1,17 +1,14 @@
 # syntax=docker/dockerfile:1.3-labs
 FROM debian:buster
 
-RUN apt update
-RUN apt install mariadb-server -y
-RUN apt install mariadb-client -y
-RUN apt install dumb-init
+RUN apt update && apt install -y mariadb-server mariadb-client dumb-init
 #automatically created username 
 COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/script.sh /tmp/
 RUN chmod +x /tmp/script.sh
 #one can edit the touch 
 
-EXPOSE 3306
+#EXPOSE 3306
 
 ARG DB_NAME
 ARG DB_USER
@@ -48,6 +45,9 @@ ARG DB_ROOT_PASSWORD
 ENTRYPOINT [ "/usr/bin/dumb-init" ]
 
 CMD ["/bin/bash", "/tmp/script.sh"]
+#waere im child, wenn der failed, schlecht
+#jetzt wird es vermutlich als parent ausgefuehrt und damit bei fail im yml gerestarted
+
 # # mysqld_safe is the recommended way to start a mysqld server on Unix. 
 # # mysqld_safe adds some safety features such as restarting the server 
 # # when an error occurs and logging runtime information to an error log.

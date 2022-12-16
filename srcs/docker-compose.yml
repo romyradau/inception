@@ -57,24 +57,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       #important to not wipe all the data and insted store it locally
-    environment:
-      MYSQL_ROOT_PASSWORD: root_pass
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_db_password
-    # ports:
-    #   - 3306:3306
-    #no ports!!
-
       
-  # php:
-  #   image: php:7.4-fpm-alpine
-  #   volumes:
-  #     - wp_data:/var/www/html:delegated
-
-
-
-
 volumes:
   wp_data:
     driver: local
