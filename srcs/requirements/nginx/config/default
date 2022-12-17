@@ -25,8 +25,8 @@ server {
 	# Checks the existence of files
 	# Otherwise a 404 will be sent
 	location / {
-		#try_files $uri $uri/ =404;
-		try_files $uri $uri/ /index.php?$args;
+		try_files $uri $uri/ =404;
+		#try_files $uri $uri/ /index.php?$args;
 	}
 
 	location ~ \.php$ {
@@ -34,4 +34,5 @@ server {
 		fastcgi_intercept_errors on;
 		fastcgi_pass php;
 	}
+	#hier kackt's ab weil es noch kein php/wp gibt.
 }

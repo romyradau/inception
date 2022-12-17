@@ -15,10 +15,11 @@ services:
     ports:
       - 443:443
     #these are the ports we can now use in the local machines browser
-
     depends_on:
       - wordpress
     restart: unless-stopped
+    volumes:
+      - wp_data:/var/www/html:delegated
 
   wordpress:
     image: wordpress:latest

@@ -3,7 +3,8 @@ FROM debian:buster
 
 RUN apt update && apt install -y mariadb-server mariadb-client dumb-init
 #automatically created username 
-COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN rm /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
 COPY ./tools/script.sh /tmp/
 RUN chmod +x /tmp/script.sh
 #one can edit the touch 
