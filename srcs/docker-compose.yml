@@ -7,57 +7,46 @@ networks:
     driver: bridge
 services:
   nginx:
-    container_name: nginx
-    # image: nginx
-    build: ./requirements/nginx
     networks:
      - inception_network
+    container_name: nginx
+    build: ./requirements/nginx
+    #creates an image based on the Dockerfile
     ports:
       - 443:443
-    #these are the ports we can now use in the local machines browser
+      #these are the ports we can now use in the local machines browser
+    volumes:
+      - wp_data:/var/www/html:delegated
     depends_on:
       - wordpress
     restart: unless-stopped
-    volumes:
-      - wp_data:/var/www/html:delegated
 
   wordpress:
-    image: wordpress:latest
-    #hier steht eigentlich build -> pfad zu custom Dockerfile
-    #vielleicht kann man es dann bei Dockerhub finden, wie es aussieht...
     networks:
      - inception_network
-    depends_on:
-      - db
-      #to avoid wordpress to connect to the db efore its ready
-      #keeps the service from starting until another one is ready
-    restart: unless-stopped
+    container_name: wordpress
+    build: ./requirements/wordpress
+    env_file:
+      - .env
     volumes:
       - wp_data:/var/www/html:delegated
       #delegated to speed up on mac os filesystems
-      #da wird psaeter bestimmt ein anderer Ordner sein
-    #this means we're picking the folder we actually want to live outside safely in wp_data
-    env_file:
-      - .env
-    #environment:
-      #uses the ones just created in db environment
-      #WORDPRESS_DB_USER: wp_user
-      #WORDPRESS_DB_PASSWORD: wp_db_pass
-      #WORDPRESS_DB_HOST: db:3306
-      #needs IP address and port of the mySQL server
-      #but with docker compose instead of IP one can use the service name - db
+      #this means we're picking the folder we actually want to live outside safely in wp_data
+    depends_on:
+      - db
+    restart: unless-stopped
+
   db:
-    container_name: mariadb
-    # image: nginx
-    env_file:
-      - .env
-    build: ./requirements/mariadb
     networks:
      - inception_network
-    restart: unless-stopped
+    container_name: mariadb
+    build: ./requirements/mariadb
+    env_file:
+      - .env
     volumes:
       - db_data:/var/lib/mysql
-      #important to not wipe all the data and insted store it locally
+      #important to not wipe all the data and instead store it locally
+    restart: unless-stopped
       
 volumes:
   wp_data:
