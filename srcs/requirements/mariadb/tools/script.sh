@@ -27,3 +27,6 @@ service mysql stop
 #should I include this?
 
 exec mysqld_safe
+# looking at the example in the dockerfile it expands to the same
+# $@ expands to all positional parameters
+# e.G. $1 references the first positional argument of the script
