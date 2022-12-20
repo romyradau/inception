@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.3-labs
 FROM debian:buster
 
-RUN apt update && apt install -y mariadb-server mariadb-client dumb-init
+RUN apt update && apt install -y mariadb-server dumb-init
 #automatically created username 
 RUN rm /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
 COPY ./tools/script.sh /bin/
-RUN chmod +x /tmp/script.sh
+RUN chmod +x /bin/script.sh
 #one can edit the touch 
 
 

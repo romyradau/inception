@@ -1,49 +1,28 @@
 FROM debian:buster
 
 RUN apt update && apt install -y \
+    mariadb-client \
 	php \
 	php-fpm \
+	#entweder manuell angeben welche version oder default TODO:what's the www.config path ?	
 	curl \
-	rm -rf /var/lib/apt/lists/*
-	#cache wird geloescht
+	&& rm -rf /var/lib/apt/lists/*
+	#uses known stuff when rebuilding, making it less cluttered
 
-#entweder manuell angeben welche version oder default	
+	#maybe put teh amriadb client here??
 
 RUN	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-	chmod +x wp-cli.phar \
-	sudo mv wp-cli.phar /usr/local/bin/wp \
-	sudo wp cli update
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar bin/wp
+	#makes wp usable as command otherwise it would be wp-cli...
+COPY tools/www.conf etc/php-fpm.d/pool.d
+#php variablen pool www.conf
+#The pool config determines amongst other things how php-fpm listens for connections
+#(e.g. via Unix socket or via TCP IP:port)
 
-# RUN docker-php-ext-install mysqli
-#this will install mysql extension for php
-RUN mkdir -p /var/www/html \
-	&& wp core download --path=/var/www/html
-
-COPY ./tools/wp-config.php /var/www/html/wordpress/
-
-
-#script
-	#cd new_wp \
-	#TODO:muss ich hier cd in meine volume machen??? er hat mkdir gemacht als er in var/www/html war
-	#TODO:alles findet ja im Ordner der Volume statt, oder ist das automatisch verlinkt?
-	# wp core download \
-	wp core config --dbname=${DB_NAME} --dbuser=${DB_ROOT} --dbpass=${DB_ROOT_PASSWORD} --dbhost=localhost \
-	#TODO:--dbprefix=...??? braucht man das?
-	#this one is for generating the wp config
-	#TODO:aber das hab ich ja theoretisch... sollte ich nicht mein locales wp-config.php nach /var/www/html/wp-config.php kopieren??
-
-# RUN rm /var/www/html/wp-config.php
-# COPY ./tools/wp-config.php /var/www/html/wp-config.php
-	#TODO:muss ich die bestehenden Files nicht erstmal rausloeschen... wobei ist nicht alles leer wenn ich ganz neu wp installiere??
-	wp db create \
-	wp core install --url=http://example.com --title=MySite --admin_user=${DB_USER} --admin_password=${DB_USER_PASSWORD} --admin_email=rschleic@student.42heilbronn.de
-	#TODO:wer ist hier admin und wer ist db_user, bzw ist db_user der root???
-#fresh wordpress installation + cerate admin user account
-#USER
-#TODO:do i have to add another admin - dann haette ich ja root und admin?!
-#wp user create <name> <mail> --role=<role> --first_name+<name> --last_name=<lastname> --user_pass=<password>
-
-#TODO:wie ist php-fpm jetzt hier verlinkt?
-#TODO: exec php-fpm
-#search for necessary options for php fpm - run im Vordergrund
+COPY ./tools/script.sh /var/www/html/config.sh
+RUN chmod +x /var/www/html/config.sh
+ENTRYPOINT [ "/var/www/html/config.sh" ]
 #mit entrypoint lauft das script als pid 1
+#TODO:wie ist php-fpm jetzt hier verlinkt?
+#TODO: exec php-fpm im script selbst!
