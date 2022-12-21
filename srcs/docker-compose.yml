@@ -16,7 +16,7 @@ services:
       - 443:443
       #these are the ports we can now use in the local machines browser
     volumes:
-      - wp_data:/var/www/html:delegated
+      - wp_data:/var/www/wordpress:delegated
     depends_on:
       - wordpress
     restart: unless-stopped
@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wp_data:/var/www/html:delegated
+      - wp_data:/var/www/wordpress:delegated
       #delegated to speed up on mac os filesystems
       #this means we're picking the folder we actually want to live outside safely in wp_data
     depends_on:

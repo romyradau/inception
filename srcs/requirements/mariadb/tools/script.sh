@@ -1,10 +1,6 @@
 #!/bin/bash
-
 chown -R mysql:mysql /var/lib/mysql
-
-# /etc/init.d/mysql start
 service mysql start
-
 
 mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DB_NAME;
@@ -14,19 +10,14 @@ FLUSH PRIVILEGES;
 UPDATE mysql.user SET Password=PASSWORD('$DB_ROOT_PASSWORD') WHERE User='$DB_ROOT';
 UPDATE mysql.user SET plugin = '' WHERE User = '$DB_ROOT' AND host = 'localhost';
 EOF
-#TODO:fragwuerdige Zeile *.* ...???
+#TODO:wofuer sind die Update Zeilen
 
 # GRANT ALL PRIVILEGES ON *.* TO '$DB_ROOT'@'%' IDENTIFIED BY '$DB_ROOT_PASSWORD';
-#TODO:priviliges fuer root @ localhost, weil ja niemadn von aussen auf root zugreifen soll.
-# #wofuer sind die Update Zeilen
+#TODO:fragwuerdige Zeile *.* ...???
+#TODO:priviliges fuer root @ localhost, weil ja niemand von aussen auf root zugreifen soll.
+
 sleep 5
 #i suppose for it to get created
-# mysqladmin -prschleic shutdown
-#for mariadb to not get restarted
 service mysql stop
-#should I include this?
 
 exec mysqld_safe
-# looking at the example in the dockerfile it expands to the same
-# $@ expands to all positional parameters
-# e.G. $1 references the first positional argument of the script
