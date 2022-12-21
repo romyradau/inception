@@ -1,4 +1,4 @@
-.PHONY: all clean fclean rebuild debug re light hardcore update
+.PHONY: all clean fclean rebuild debug re light hardcore update start stop log
 all:
 	mkdir -p /home/rschleic/data/mariadb
 	mkdir -p /home/rschleic/data/wordpress
@@ -31,3 +31,12 @@ hardcore: fclean debug all
 update:
 	sudo apt-get update
 	sudo apt-get upgrade
+
+start:
+	docker compose -f ./srcs/docker-compose.yml start
+
+stop:
+	docker compose -f ./srcs/docker-compose.yml stop
+
+log:
+	docker compose -f ./srcs/docker-compose.yml logs

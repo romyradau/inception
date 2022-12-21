@@ -1,4 +1,7 @@
 #!/bin/bash
+
+if [[ ! -d /var/lib/mysql/wordpress ]]; then
+
 chown -R mysql:mysql /var/lib/mysql
 service mysql start
 
@@ -19,5 +22,8 @@ EOF
 sleep 5
 #i suppose for it to get created
 service mysql stop
+
+fi
+
 
 exec mysqld_safe
