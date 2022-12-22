@@ -25,5 +25,4 @@ service mysql stop
 
 fi
 
-
 exec mysqld_safe
